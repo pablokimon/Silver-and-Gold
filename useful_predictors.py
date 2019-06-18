@@ -100,7 +100,7 @@ def plot_series_and_difference(axs, series, title):
 
 #plot the series and the series differenced
 fig, axs = plt.subplots(2, figsize=(14, 4))
-plot_series_and_difference(axs, metal, "Precious Metals")
+plot_series_and_difference(axs, metal, "Precious Metal:"+name)
 plt.tight_layout()
 plt.show()
 
