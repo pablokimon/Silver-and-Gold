@@ -27,21 +27,13 @@ def load_precious_metals_data(start_date,end_date,name):
     date = 'Date'
     file_name = './data/{}'.format(''.join([ name, ' Futures Historical Data.csv']))
     #print (file_name)
-    df = pd.read_csv(file_name,sep=',', thousands=',')
+    df = pd.read_csv(file_name,sep=',', thousands=',' )
     df.sort_values(date,inplace=True)
-    df = df.set_index(pd.to_datetime(df[date]))
-    del df[date]
-    print('Summary statistics for the',name,'data series')
-    print ('Over the date range of: ',start_date,'through',end_date)
-    print ('The standard deviation:')
-    print (df.std())
-    print ('The average:')
-    print (df.mean())
-    print ('The maximums:')
-    print (df.max())
-    print ('The minimums:')
-    print (df.min())
-    return pd.Series(df[price], df.index).loc[start_date:end_date]
+    df = df.set_index(pd.to_datetime(df[date]),drop=True)
+    df = df.loc[start_date:end_date]
+    print('Summary statistics for the',name,'data series from',start_date,'to',end_date)
+    print (pd.concat([df.describe()[0:4],df.describe()[-1::]]))
+    return pd.Series(df[price], df.index)
 
 metal = load_precious_metals_data(start_date,end_date,name)
 #print (metal)
@@ -60,7 +52,7 @@ def ADF_test(x):
         print('A p-value greater than {} indicates the {} data are not stationary'.format(alpha,name))
 
 ADF_test(metal)
-name = "differenced "+name
+name = "differenced " + name
 ADF_test(metal_diff)
 
 
